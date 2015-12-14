@@ -1,0 +1,22 @@
+elasticsearch:
+  image: elasticsearch:1.7
+  ports:
+    - "9200:9200"
+    - "9300:9300"
+logstash:
+  image: logstash:1.5
+  command: logstash -f /etc/logstash/conf.d/logstash.conf
+  volumes:
+    - $PWD/logstash/config:/etc/logstash/conf.d
+  ports:
+    - "5000:5000"
+  links:
+    - elasticsearch
+kibana:
+  image: kibana:4.1
+  volumes:
+    - $PWD/kibana/config/kibana.yml:/opt/kibana/config/kibana.yml
+  ports:
+    - "5601:5601"
+  links:
+    - elasticsearch
